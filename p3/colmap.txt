@@ -1,0 +1,51 @@
+colmap feature_extractor \
+    --database_path ./database.db \
+    --image_path ./images \
+    --SiftExtraction.use_gpu 1
+
+colmap sequential_matcher --database_path ./database.db
+
+colmap mapper \
+    --database_path ./database.db \
+    --image_path ./images \
+    --output_path ./sparse
+
+Dense: 
+
+colmap image_undistorter \
+    --image_path ./images \
+    --input_path ./sparse/0 \
+    --output_path ./dense \
+    --output_type COLMAP
+
+colmap patch_match_stereo --workspace_path ./dense
+
+VISION-PSET/
+├── colmap/
+│   ├── sparse/
+│   │   └── 0/
+│   │       ├── cameras.bin
+│   │       ├── images.bin
+│   │       ├── points3D.bin
+│   ├── dense/
+│   ├── database.db
+│   ├── run-colmap-geometric.sh
+│   ├── run-colmap-photometric.sh
+├── images/
+
+
+ns-process-data images \
+  --data ./ns_input/images \
+  --output-dir ./ns_scene \
+  --skip-colmap \
+  --colmap-model-path ../ns_input/colmap/sparse/0 \
+
+export PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.0
+export CUDA_VISIBLE_DEVICES=""
+
+ns-train nerfacto \
+  --data ./ns_scene \
+  --max-num-iterations 30000 \
+  --viewer.quit-on-train-completion True \
+  --machine.device-type mps
+

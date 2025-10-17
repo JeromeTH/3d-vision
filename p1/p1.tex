@@ -1,0 +1,35 @@
+\documentclass{article}
+
+% Packages for math and formatting
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{bm}
+\usepackage{physics}
+
+
+% Page setup
+\geometry{margin=1in}
+
+\begin{document}
+A set of parallel lines is parallel to the ray connecting the optical center and their vanishing point. 
+If the vanishing point appears at pixels $(x, y)$ on the image with optical center $(x_c, y_c)$, then 
+the ray is characterized by the homogenous coordinates
+$$ 
+\begin{bmatrix}
+    x - x_c \\
+    y - y_c \\ 
+    f
+\end{bmatrix}
+$$
+
+(assuming aspect ratio of 1). 
+We also know that two rays may be orthogonal in 3D space is the lines parallel to each of them are orthogonal. 
+Thus, let $(x_1, y_1), (x_2, y_2)$ be the vanishing points of two orthogonal set of parallel lines, 
+we have 
+\begin{align*}
+    (x_1 - x_c, y_1 - y_c, f) \cdot (x_2 - x_c, y_2 - y_c, f) = 0 \Leftrightarrow\\
+    f^2 = -(x_1 - x_c)(x_2 - x_c) - (y_1 - y_c)(y_2 - y_c)
+\end{align*}
+
+\end{document}
