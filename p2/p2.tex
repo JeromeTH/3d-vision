@@ -199,25 +199,7 @@ Equivalently, the per-pixel solid angle is
 \boxed{\, \Delta\Omega(u,v) \;\approx\; \cos\!\big(\phi(v)\big)\;\frac{2\pi^2}{WH}\, }.
 \]
 Hence each ERM texel covers \emph{larger} solid angle near the equator ($\phi\approx 0$) and \emph{shrinks} to zero near the poles ($|\phi|\to \tfrac{\pi}{2}$).
-
-\paragraph{Implications for importance sampling.}
-Uniformly picking ERM pixels (uniform in $u,v$) is \emph{not} uniform over directions:
-the induced PDF on latitude is proportional to $\cos\phi$. To sample directions
-uniformly on the sphere, draw
-\[
-\lambda \sim \mathrm{Unif}[-\pi,\pi),\qquad
-\phi \;\text{ with PDF }\; f_\phi(\phi)=\tfrac{1}{2}\cos\phi\ \Rightarrow\
-\phi=\arcsin(2\xi-1),\ \xi\sim\mathrm{Unif}[0,1].
-\]
-For environment-map \emph{importance sampling}, weight texels by
-$l(u,v)\cos\phi(v)$ (radiance/luminance times $\cos\phi$) when building the sampling distribution, so that selection probability is proportional to contribution per unit solid angle.
-
-\paragraph{Implications for antialiasing near the poles.}
-Because horizontal arc length on the sphere scales as $\cos\phi$ for a given $d\lambda$,
-ERM \emph{oversamples} near the poles and \emph{undersamples} near the equator in terms of solid angle per texel. When resampling an ERM into a perspective view, the reconstruction footprint in texture space should therefore be \emph{anisotropic}, using a larger longitudinal filter support at high latitudes:
-\[
-\text{effective longitudinal footprint} \;\propto\; \frac{1}{\cos\phi}.
-\]
-Practically: use MIP/anisotropic filtering with an LOD bias that increases toward the poles (in the $u$/$\lambda$ direction), or average $\sim 1/\cos\phi$ more ERM texels horizontally at high $|\phi|$. This preserves energy (solid angle) and reduces aliasing/over-blur artifacts that otherwise appear when extracting views near the poles.
+At the poles, each pixel covers a tiny solid angle, thus prone to amplify the effects of flickers. 
+Therefore, smoothing out signals or antialiasing near the poles is very important. 
 
 \end{document}
